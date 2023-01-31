@@ -1,5 +1,5 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: %i[ show update destroy ]
+  before_action :set_todo, only: %i[ show update destroy NzPatch ]
 
   # GET /todos
   def index
@@ -35,10 +35,6 @@ class TodosController < ApplicationController
 
   # PATCH/PUT /todos/1
   def update
-    # * Get the param currentIndex and insert it in at that index 
-    # * then put it in between the parenthese
-    # * Loop and Update the entire table 
-    currIndex = todo_params["currentIndex"]
     @todos = Todo.all
     flag = 0
     @todos = @todos.sort_by(&:currentIndex)
@@ -54,25 +50,21 @@ class TodosController < ApplicationController
         flag = flag + 1
       end
     end
-    # @todos.each do |todo|
-    #   if todo == @todo
-    #     todo.update({"currentIndex": todo_params["currentIndex"]})
-    #   else
-    #     if flag == todo_params["currentIndex"]
-    #       flag = flag + 1
-    #     end
-    #     todo.update({"currentIndex": flag})
-    #   end
-    #   flag = flag + 1
-    # end    
 
     # if @todo.update(todo_params)
-    # if @todo.update({"currentIndex": 1992})
     #   puts "HELLO"
     #   render json: @todo
     # else
     #   render json: @todo.errors, status: :unprocessable_entity
     # end
+  end
+
+  def NzPatch
+      if @todo.update(todo_params)
+        render json: @todo
+      else
+        render json: @todo.errors, status: :unprocessable_entity
+      end
   end
 
   # DELETE /todos/1
