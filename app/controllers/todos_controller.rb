@@ -11,11 +11,20 @@ class TodosController < ApplicationController
   end
 
   # GET /todos/1
+  def getByCategory
+    category = Category.find(params[:id])
+    todos = category.todos
+
+    render json: todos
+  end
+
+  # GET /todos/1
   def show
     render json: @todo
   end
 
-  # POST /todos
+  # POST /todos 
+  # @book = @author.books.create(published_at: Time.now)
   def create
     @thisIndex = 0
     if Todo.all.length > 0
@@ -23,7 +32,8 @@ class TodosController < ApplicationController
       @thisIndex = @lastIndex + 1
     end
     # @todo = Todo.new(todo_params)
-    @todo = Todo.new({"currentIndex": @thisIndex, "content": todo_params["content"] })
+    @todo = Category.find(1).todos.create({"currentIndex": @thisIndex, "content": todo_params["content"] })
+    # @todo = Category.todos.create({"currentIndex": @thisIndex, "content": todo_params["content"] })
 
     if @todo.save
       render json: @todo, status: :created, location: @todo
@@ -34,6 +44,7 @@ class TodosController < ApplicationController
   end
 
   # PATCH/PUT /todos/1
+  # Updates the current Index in the drag and drop
   def update
     @todos = Todo.all
     flag = 0
@@ -60,7 +71,8 @@ class TodosController < ApplicationController
   end
 
   def NzPatch
-      if @todo.update(todo_params)
+      # if @todo.update(todo_params)
+      if Category.first.todos.find(params[:id]).update({"content": todo_params["content"]})
         render json: @todo
       else
         render json: @todo.errors, status: :unprocessable_entity
