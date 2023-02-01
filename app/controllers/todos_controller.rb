@@ -14,6 +14,7 @@ class TodosController < ApplicationController
   def getByCategory
     category = Category.find(params[:id])
     todos = category.todos
+    todos = todos.order(:currentIndex)
 
     render json: todos
   end
@@ -32,7 +33,7 @@ class TodosController < ApplicationController
       @thisIndex = @lastIndex + 1
     end
     # @todo = Todo.new(todo_params)
-    @todo = Category.find(1).todos.create({"currentIndex": @thisIndex, "content": todo_params["content"] })
+    @todo = Category.find(todo_params["category_id"]).todos.create({"currentIndex": @thisIndex, "content": todo_params["content"] })
     # @todo = Category.todos.create({"currentIndex": @thisIndex, "content": todo_params["content"] })
 
     if @todo.save
@@ -93,6 +94,6 @@ class TodosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def todo_params
-      params.require(:todo).permit(:content, :currentIndex, :currentInteger)
+      params.require(:todo).permit(:content, :currentIndex, :currentInteger, :category_id)
     end
 end
