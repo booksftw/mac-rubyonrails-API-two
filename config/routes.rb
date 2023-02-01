@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   get '/categories/', to: 'categories#index'
   post '/categories/', to: 'categories#create'
-  # get '/categories/:id', to: 'categories#getByCategory'
+  delete 'categories/:id', to: 'categories#destroy'
+  put 'categories/:id', to: 'categories#update' 
   
   get '/todos/:id', to: 'todos#getByCategory'
   patch '/todos/:id', to: 'todos#NzPatch'

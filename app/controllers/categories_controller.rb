@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-    # before_action :set_category, only: []
+    before_action :set_category, only: [:destroy, :update]
 
     # GET /categories
     def index
@@ -18,6 +18,15 @@ class CategoriesController < ApplicationController
         else
             render json: @category.errors, status: :unprocessable_entity
           end
+    end
+
+    def update
+        @category.update("name": category_params['name'])
+        render json: @category
+    end
+
+    def destroy
+        @category.destroy
     end
 
     private
